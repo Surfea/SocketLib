@@ -81,7 +81,7 @@ namespace co.Surfea.net
         }
 
         /// <summary>
-        /// Routine to process incoming data from the client socket.  Will parse the dat
+        /// Routine to process incoming data from the client socket.  Will parse the data by line
         /// </summary>
         /// <param name="socket">Client socket</param>
         async private void ProcessData(StreamSocket socket)

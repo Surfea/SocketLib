@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SocketLib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Event based socket server that makes it easy to add networking to any Windows 8.1 / Windows Phone 8.1 program.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Surfea")]
 [assembly: AssemblyProduct("SocketLib")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
