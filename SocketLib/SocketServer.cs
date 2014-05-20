@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
-
 using System.Diagnostics;
 
 namespace co.Surfea.net
@@ -26,11 +24,14 @@ namespace co.Surfea.net
         #region Events
 
         /// <summary>
-        ///  A message is defined as a '\n' delimited line received from a client
+        ///  A message is defined as a '\n' delimited line received from a client.
         /// </summary>
-
         public event EventHandler MessageEvent;
 
+        /// <summary>
+        /// Event to fire when new data is received from the client.
+        /// </summary>
+        /// <param name="e">Information to pass back</param>
         public virtual void OnMessage(MessageEventArgs e)
         {
             if (MessageEvent != null)
@@ -54,6 +55,9 @@ namespace co.Surfea.net
 
         #endregion
 
+        /// <summary>
+        /// Start the socket server
+        /// </summary>
         public async void Start()
         {
             _listener.ConnectionReceived += _listener_ConnectionReceived;
@@ -62,6 +66,11 @@ namespace co.Surfea.net
             Debug.WriteLine("Server started - listening on {0}", _listener.Information.LocalPort);
         }
 
+        /// <summary>
+        /// Callback for when a new client connects to the server.
+        /// </summary>
+        /// <param name="sender">Socket listener</param>
+        /// <param name="args">Contains information about the newly connected client.</param>
         void _listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
             _connections.Add(args.Socket);
@@ -69,18 +78,20 @@ namespace co.Surfea.net
             Debug.WriteLine(string.Format("Incoming connection from {0}", args.Socket.Information.RemoteHostName.DisplayName));
 
             ProcessData(args.Socket);
-
         }
 
+        /// <summary>
+        /// Routine to process incoming data from the client socket.  Will parse the dat
+        /// </summary>
+        /// <param name="socket">Client socket</param>
         async private void ProcessData(StreamSocket socket)
         {
-
             string buffer = "";
 
             var reader = new DataReader(socket.InputStream);
             reader.InputStreamOptions = InputStreamOptions.Partial;
 
-
+            // indicates we have a complete packet of data
             bool gotNewline = false;
 
             while (!gotNewline)
@@ -92,7 +103,6 @@ namespace co.Surfea.net
                 {
                     // Read until the newline
                     buffer = buffer + reader.ReadString(count);
-                    //Debug.WriteLine(string.Format("Got: {0}", buffer));
                 }
                 else
                 {
@@ -118,6 +128,11 @@ namespace co.Surfea.net
         }
     }
 
+    #region Events
+
+    /// <summary>
+    /// Event class to pass back received client data.
+    /// </summary>
     public class MessageEventArgs : EventArgs
     {
         public MessageEventArgs(string msg)
@@ -127,4 +142,7 @@ namespace co.Surfea.net
 
         public string Message { get; private set; }
     }
+
+    #endregion
+
 }
